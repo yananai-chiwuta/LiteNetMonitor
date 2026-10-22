@@ -37,7 +37,7 @@ class LiteNetworkMonitor:
         self.closed = self.paused = self.tray_pending = self.ping_pending = False
         self.icon = self.after_id = self.drag_origin = None
         self.notice_until = 0
-        self.root.title('LiteNetMonitor')
+        self.root.title(f'LiteNetMonitor {APP_VERSION}')
         self.root.resizable(False, False)
         self.root.geometry('380x374')
         self.root.attributes('-topmost', self.settings['always_on_top'])
@@ -472,4 +472,10 @@ class LiteNetworkMonitor:
 if __name__ == '__main__':
     root = tk.Tk()
     app = LiteNetworkMonitor(root)
-    root.mainloop()
+    if '--smoke-test' in sys.argv:
+        root.update()
+        if not app.status.winfo_ismapped():
+            raise RuntimeError('The application controls did not render')
+        root.destroy()
+    else:
+        root.mainloop()

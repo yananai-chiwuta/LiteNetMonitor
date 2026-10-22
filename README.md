@@ -1,54 +1,86 @@
-# Lite NetMonitor
+# LiteNetMonitor
 
-[![CI](https://github.com/yananai-chiwuta/LiteNetMonitor/actions/workflows/ci.yml/badge.svg)](https://github.com/yananai-chiwuta/LiteNetMonitor/actions/workflows/ci.yml) · [MIT license](LICENSE)
+[![CI](https://github.com/yananai-chiwuta/LiteNetMonitor/actions/workflows/ci.yml/badge.svg)](https://github.com/yananai-chiwuta/LiteNetMonitor/actions/workflows/ci.yml) [![Latest release](https://img.shields.io/github/v/release/yananai-chiwuta/LiteNetMonitor)](https://github.com/yananai-chiwuta/LiteNetMonitor/releases/latest) [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A small desktop widget for watching network traffic. It uses Python, Tkinter, and psutil, with native window decorations on macOS and Linux and a compact borderless window on Windows.
+A quiet, compact desktop view of your network traffic. LiteNetMonitor shows live download and upload rates, a one-minute graph, and session totals in a small Tkinter window. **Current release: v1.1.0.**
 
-## What it does
+## Download v1.1.0
 
-- Shows current download and upload rates, with a bounded one-minute graph.
-- Displays received and sent totals for the current session, with a reset action.
-- Supports midnight and paper themes, KiB/s or decimal bits/s, adapter selection, and an unavailable state when an adapter cannot be read.
-- Lets you pause the display while traffic sampling continues.
-- Saves the theme, units, selected adapter, topmost setting, sampling interval, and window position.
-- Exports a CSV snapshot and copies the current speeds.
-- Offers an optional system tray on Windows and Linux. macOS uses the regular window minimize behavior.
-- On Windows, provides an optional startup toggle.
+Choose the archive for your system, extract it, and launch the app inside. No Python installation is needed for these builds.
 
-The app does not make network requests in the background. The explicit ping action contacts `1.1.1.1`.
+| Platform | Download |
+| --- | --- |
+| Windows 10/11, x64 | [LiteNetMonitor-1.1.0-windows-x64.zip](https://github.com/yananai-chiwuta/LiteNetMonitor/releases/download/v1.1.0/LiteNetMonitor-1.1.0-windows-x64.zip) |
+| Linux, x64 (glibc 2.35+) | [LiteNetMonitor-1.1.0-linux-x64.tar.gz](https://github.com/yananai-chiwuta/LiteNetMonitor/releases/download/v1.1.0/LiteNetMonitor-1.1.0-linux-x64.tar.gz) |
+| macOS 14+, Apple silicon (arm64) | [LiteNetMonitor-1.1.0-macos-arm64.zip](https://github.com/yananai-chiwuta/LiteNetMonitor/releases/download/v1.1.0/LiteNetMonitor-1.1.0-macos-arm64.zip) |
+| macOS 15+, Intel (x64) | [LiteNetMonitor-1.1.0-macos-x64.zip](https://github.com/yananai-chiwuta/LiteNetMonitor/releases/download/v1.1.0/LiteNetMonitor-1.1.0-macos-x64.zip) |
+
+[See the release and notes](https://github.com/yananai-chiwuta/LiteNetMonitor/releases/tag/v1.1.0). Linux desktop libraries such as Tk and X11 may need to be installed on your system. CI downloads are unsigned and the macOS apps are not notarized.
+
+## Features
+
+- Midnight and paper themes; refresh every 1, 2, or 5 seconds.
+- Download and upload rates in KiB/s or decimal bits/s, plus a scrolling graph covering the last 60 seconds.
+- Session received/sent totals, with reset and CSV snapshot export.
+- Select a network adapter or view all adapters. Missing adapters are shown as unavailable.
+- Pause the display while counting continues; keep the widget on top; save preferences and window position.
+- Copy current speeds, view local interface addresses, and explicitly ping `1.1.1.1`.
+- Native decorated window on macOS and Linux; compact borderless window on Windows. Optional source-run tray support on Windows and Linux; startup toggle on Windows.
+
+**Shortcuts:** `Space` pauses/resumes the display · `Ctrl+C` / `Cmd+C` copies speeds · `T` switches theme · `Escape` minimizes · drag the header to move the window · right-click or **•••** opens settings.
+
+Session totals start when the app opens and reset when you quit, reset the session, or change adapters. They are not a monthly usage meter. Viewing all adapters can count VPN or virtual interface traffic more than once, so select a physical adapter for a clearer total.
 
 ## Run from source
 
-Python 3.11 or newer is recommended. Tkinter is included with many Python installers; on Linux, install your distribution's Tk package if it is missing (often named `python3-tk`).
+Python 3.11 or newer is required. Tkinter is included with most Python installers; Linux users may need their distribution's Tk package, often `python3-tk`.
 
 ```sh
 git clone https://github.com/yananai-chiwuta/LiteNetMonitor.git
 cd LiteNetMonitor
-python -m venv .venv
 ```
 
-Activate the environment, then install and run:
+Install and launch with the environment's Python:
 
-- Windows PowerShell: `.venv\Scripts\Activate.ps1`
-- macOS / Linux: `source .venv/bin/activate` (use `python3` to create the environment if needed).
+```powershell
+# Windows PowerShell
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe LiteNetMonitor.pyw
+```
 
 ```sh
-python -m pip install -r requirements.txt
-python LiteNetMonitor.pyw
+# macOS / Linux
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python LiteNetMonitor.pyw
 ```
 
-For optional tray support when running from source on Windows or Linux, run `python -m pip install -r requirements-tray.txt`. Tray availability depends on desktop environment support. On macOS, use the normal window controls. Compact packaged builds use regular minimize and omit tray libraries.
+For optional tray support when running from source on Windows or Linux, install `requirements-tray.txt` using your environment's Python. Packaged builds use regular minimize.
 
-Right-click or use **•••** for settings and tools. **Space** pauses the display, **Ctrl/Cmd+C** copies speeds, **T** changes theme, and **Escape** minimizes. Drag the header to move the widget. Session totals reset when you quit, reset the session, or change adapters; they are not a monthly data meter. All-adapter totals may count VPN and virtual-interface traffic more than once; select your physical adapter for a clearer reading.
+## Privacy and preferences
 
-## Build status
+Monitoring reads local interface counters. There is no account, analytics, telemetry, or background network request. Only the explicit latency check sends a ping to `1.1.1.1`. CSV files are saved only where you choose, and local IP information stays in the app.
 
-GitHub Actions can build downloadable platform artifacts when manually run from the Actions tab. These are unsigned CI artifacts, not a published or signed release. The project has not yet verified these builds on real Windows, macOS, and Linux desktop sessions; Tk availability and tray behavior vary by platform.
+Preferences are saved as `settings.json` in:
 
-## License
+| System | Folder |
+| --- | --- |
+| Windows | `%LOCALAPPDATA%\LiteNetMonitor` |
+| macOS | `~/Library/Application Support/LiteNetMonitor` |
+| Linux | `$XDG_CONFIG_HOME/litenetmonitor`, or `~/.config/litenetmonitor` |
 
-MIT. This permissive license allows reuse, modification, and redistribution while requiring preservation of copyright and license notices. See [MIT terms](https://choosealicense.com/licenses/mit/). Dependencies retain their own licenses: psutil uses BSD-3-Clause; optional pystray uses LGPL-3.0 and Pillow uses MIT-CMU. The compact build omits these tray extras.
+## Troubleshooting
 
-## Project direction
+- **No Tkinter module:** install the Tk package for your Python version (`python3-tk` on Ubuntu/Debian), then restart.
+- **Adapter unavailable:** select another adapter from **••• → Network adapter**. Adapter selection starts a fresh session.
+- **Tray icon missing:** desktop support varies; regular minimize works without tray libraries.
+- **Ping gets no reply:** ICMP may be blocked even when your connection works.
 
-The goal is a focused desktop monitor that stays small and easy to run. Future ideas include optional longer-term history and configurable data caps, if they can be added without making the widget cumbersome.
+## Development and license
+
+Run checks with `python -m unittest discover -s tests -v`. Source and desktop integration checks run on Windows, macOS, and Linux with Python 3.11 and 3.13. Each release build also starts the packaged app before publishing.
+
+Versions follow `major.minor.patch`. `APP_VERSION` in [netmonitor_core.py](netmonitor_core.py) drives the app title, About dialog, executable metadata, archive names, and `VERSION.txt`. Release tags must match it, for example `v1.1.0`. Downloads include [SHA-256 checksums](https://github.com/yananai-chiwuta/LiteNetMonitor/releases/download/v1.1.0/SHA256SUMS.txt).
+
+See [contributing notes](CONTRIBUTING.md), the [changelog](CHANGELOG.md), and the [release build workflow](.github/workflows/build.yml). LiteNetMonitor is licensed under [MIT](LICENSE); dependencies retain their own licenses.
