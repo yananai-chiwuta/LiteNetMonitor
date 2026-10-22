@@ -34,7 +34,9 @@ class DesktopTests(unittest.TestCase):
     def test_window_controls_fit_and_menu_survives_posting(self):
         self.assertLess(self.app.pause_btn.winfo_rooty() + self.app.pause_btn.winfo_height(),
                         self.root.winfo_rooty() + self.root.winfo_height())
-        self.app.popup_menu()
+        # Native popup menus can wait for human input on unattended CI desktops.
+        with patch.object(tk.Menu, 'tk_popup'):
+            self.app.popup_menu()
         self.root.update_idletasks()
         self.assertTrue(self.app.menu.winfo_exists())
         self.app.menu.unpost()

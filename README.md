@@ -1,5 +1,7 @@
 # Lite NetMonitor
 
+[![CI](https://github.com/yananai-chiwuta/LiteNetMonitor/actions/workflows/ci.yml/badge.svg)](https://github.com/yananai-chiwuta/LiteNetMonitor/actions/workflows/ci.yml) · [MIT license](LICENSE)
+
 A small desktop widget for watching network traffic. It uses Python, Tkinter, and psutil, with native window decorations on macOS and Linux and a compact borderless window on Windows.
 
 ## What it does
@@ -20,6 +22,8 @@ The app does not make network requests in the background. The explicit ping acti
 Python 3.11 or newer is recommended. Tkinter is included with many Python installers; on Linux, install your distribution's Tk package if it is missing (often named `python3-tk`).
 
 ```sh
+git clone https://github.com/yananai-chiwuta/LiteNetMonitor.git
+cd LiteNetMonitor
 python -m venv .venv
 ```
 

@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   check:
+    timeout-minutes: 10
     name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
