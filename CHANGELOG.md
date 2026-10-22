@@ -1,15 +1,10 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+Notable changes to Lite NetMonitor are recorded here.
 
-## [1.0.0] - 2026-09-05
-### Added
-* Initial release of Lite NetMonitor.
-* Real-time download/upload speed tracking in KB/s and MB/s.
-* Session and boot-level data usage totals.
-* Borderless UI with 4px rounded corners (Windows API integration).
-* System tray integration (minimize to tray, background running).
-* Context menu with themes (Dark, Light, Matrix).
-* Auto-start registry toggling.
-* Double-click clipboard copying.
-* Network Latency (Ping) tool.
+## Unreleased
+
+- Reworked the app into a compact cross-platform network monitor.
+- Added midnight and paper themes, bounded traffic history, session totals and reset, adapter selection, pause-display behavior, saved settings, CSV snapshot export, and speed copying.
+- Added optional tray integration for Windows and Linux and a Windows startup toggle.
+- Added CI checks and a manual workflow for platform build artifacts.

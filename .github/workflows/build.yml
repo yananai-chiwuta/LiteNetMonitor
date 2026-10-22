@@ -1,0 +1,43 @@
+name: Build artifacts
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install application and build dependencies
+        run: python -m pip install -r requirements.txt pyinstaller
+      - name: Build executable (Windows and Linux)
+        if: runner.os != 'macOS'
+        run: python -m PyInstaller --noconfirm --clean --windowed --onefile --exclude-module pystray --exclude-module PIL --name LiteNetMonitor LiteNetMonitor.pyw
+      - name: Build macOS app bundle
+        if: runner.os == 'macOS'
+        run: python -m PyInstaller --noconfirm --clean --windowed --name LiteNetMonitor LiteNetMonitor.pyw
+      - name: Archive macOS app bundle
+        if: runner.os == 'macOS'
+        run: ditto -c -k --sequesterRsrc --keepParent dist/LiteNetMonitor.app dist/LiteNetMonitor-macos.zip
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LiteNetMonitor-${{ runner.os }}
+          path: |
+            ${{ runner.os == 'macOS' && 'dist/LiteNetMonitor-macos.zip' || 'dist/LiteNetMonitor*' }}
+            LICENSE
+            THIRD_PARTY_NOTICES.txt
+            README.md
+          if-no-files-found: error
